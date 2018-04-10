@@ -59,11 +59,15 @@
             break;
         case 2:
         {
-            AXWebViewController *webVC = [[AXWebViewController alloc] initWithAddress:@"http://www.baidu.com"];
+            AXWebViewController *webVC = [[AXWebViewController alloc] initWithAddress:@"http://takeaway.one2paid.com/"];
             UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:webVC];
             nav.navigationBar.tintColor = [UIColor colorWithRed:0.322 green:0.322 blue:0.322 alpha:1.00];
             [self presentViewController:nav animated:YES completion:NULL];
+//            webVC.showsToolBar = YES;
+//             webVC.navigationType = 1;
+            //顶部,不能起作用
             webVC.showsToolBar = YES;
+            //底部按钮
             webVC.navigationType = 1;
         }
             break;
@@ -110,7 +114,10 @@
 }
 
 - (IBAction)clearCache:(id)sender {
-    [[AXPracticalHUD sharedHUD] showNormalInView:self.navigationController.view text:@"清理缓存..." detail:nil configuration:NULL];
+//    [[AXPracticalHUD sharedHUD] showNormalInView:self.navigationController.view text:@"清理缓存..." detail:nil configuration:NULL];
+    
+    [[AXPracticalHUD sharedHUD] showTextInView:self.navigationController.view  text:@"清理缓存..." detail:nil configuration:nil];
+    
     [AXWebViewController clearWebCacheCompletion:^{
         [[AXPracticalHUD sharedHUD] hide:YES afterDelay:0.5 completion:NULL];
     }];

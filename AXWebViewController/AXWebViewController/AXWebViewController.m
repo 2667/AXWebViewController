@@ -325,6 +325,8 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
         [container setHitBlock:^() {
             // if (!self.webView.isLoading) [self.webView reloadFromOrigin];
         }];
+//        container.backgroundColor = [UIColor redColor];
+        
         [container setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.view addSubview:container];
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[container]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(container)]];
@@ -612,6 +614,8 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
     _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
     _webView.allowsBackForwardNavigationGestures = YES;
     _webView.backgroundColor = [UIColor clearColor];
+//    _webView.scrollView.backgroundColor = [UIColor blueColor];
+
     _webView.scrollView.backgroundColor = [UIColor clearColor];
     // Set auto layout enabled.
     _webView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -639,7 +643,10 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
     return _progressView;
 }
 
-- (UIView *)containerView { return [self.view viewWithTag:kContainerViewTag]; }
+- (UIView *)containerView {
+    return [self.view viewWithTag:kContainerViewTag];
+    
+}
 #else
 - (UIWebView*)webView {
     if (_webView) return _webView;
@@ -709,7 +716,14 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
 
 - (UIBarButtonItem *)actionBarButtonItem {
     if (_actionBarButtonItem) return _actionBarButtonItem;
-    _actionBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+//    _actionBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+    
+    _actionBarButtonItem = [[UIBarButtonItem alloc] initWithImage:
+                          [UIImage imageNamed:@"home"] style:UIBarButtonItemStylePlain
+                                                         target:self
+                                                         action:@selector(actionButtonClicked:)];
+    _actionBarButtonItem.width = 18.0f;
+    
     return _actionBarButtonItem;
 }
 
@@ -1142,6 +1156,15 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
 }
 
 - (void)actionButtonClicked:(UIBarButtonItem *)sender {
+    
+    // 设置访问的URL
+    NSURL *url = [NSURL URLWithString:@"http://takeaway.one2paid.com/"];
+    // 根据URL创建请求
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    // WKWebView加载请求
+    [_webView loadRequest:request];
+    
+    /*
     NSArray *activities = @[[AXWebViewControllerActivitySafari new], [AXWebViewControllerActivityChrome new]];
     NSURL *URL;
 #if AX_WEB_VIEW_CONTROLLER_USING_WEBKIT
@@ -1158,6 +1181,8 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
     }
     
     [self presentViewController:activityController animated:YES completion:nil];
+    
+    */
 }
 
 - (void)navigationItemHandleBack:(UIBarButtonItem *)sender {
@@ -1308,12 +1333,16 @@ BOOL AX_WEB_VIEW_CONTROLLER_iOS10_0_AVAILABLE() { return AX_WEB_VIEW_CONTROLLER_
     // For appstore and system defines. This action will jump to AppStore app or the system apps.
     if ([[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] 'https://itunes.apple.com/' OR SELF BEGINSWITH[cd] 'mailto:' OR SELF BEGINSWITH[cd] 'tel:' OR SELF BEGINSWITH[cd] 'telprompt:'"] evaluateWithObject:components.URL.absoluteString]) {
         if ([[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] 'https://itunes.apple.com/'"] evaluateWithObject:components.URL.absoluteString] && !_reviewsAppInAppStore) {
-            [[AXPracticalHUD sharedHUD] showNormalInView:self.view.window text:nil detail:nil configuration:^(AXPracticalHUD *HUD) {
-                // Disabled the background touching lock to fix the
-                // issue: https://github.com/devedbox/AXWebViewController/issues/67
-                // HUD.lockBackground = YES;
-                HUD.removeFromSuperViewOnHide = YES;
+            [[AXPracticalHUD sharedHUD]  showTextInView:self.view.window text:nil detail:nil  configuration:^(AXPracticalHUD *HUD) {
+                   HUD.removeFromSuperViewOnHide = YES;
+                
             }];
+//            [[AXPracticalHUD sharedHUD] showNormalInView:self.view.window text:nil detail:nil configuration:^(AXPracticalHUD *HUD) {
+//                // Disabled the background touching lock to fix the
+//                // issue: https://github.com/devedbox/AXWebViewController/issues/67
+//                // HUD.lockBackground = YES;
+//                HUD.removeFromSuperViewOnHide = YES;
+//            }];
             SKStoreProductViewController *productVC = [[SKStoreProductViewController alloc] init];
             productVC.delegate = self;
             NSError *error;

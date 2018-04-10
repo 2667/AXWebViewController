@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <objc/runtime.h>
-// #import "AXWebViewController.h"
+ #import "AXWebViewController.h"
 
 @interface AppDelegate ()
 
@@ -19,6 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.322 green:0.322 blue:0.322 alpha:1.00],NSForegroundColorAttributeName,[UIFont boldSystemFontOfSize:16],NSFontAttributeName, nil]]; //Nav文字属性
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.322 green:0.322 blue:0.322 alpha:1.00]];
     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.322 green:0.322 blue:0.322 alpha:1.00],NSForegroundColorAttributeName, [UIFont systemFontOfSize:14],NSFontAttributeName , nil] forState:0];
@@ -30,22 +31,30 @@
     } else {
         [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -2) forBarMetrics:UIBarMetricsDefault];
     }
+    
+    
+    
     /*
     NSBundle *bundle = [NSBundle bundleForClass:NSClassFromString(@"AXWebViewController")];
     NSString *bundlePath = [bundle pathForResource:@"AXWebViewController.bundle/html.bundle/404" ofType:@"html"];
      */
-    /*
-    AXWebViewController *webVC = [[AXWebViewController alloc] initWithAddress:@"https://www.baidu.com"];
-    webVC.showsToolBar = NO;
+    
+    AXWebViewController *webVC = [[AXWebViewController alloc] initWithAddress:@"http://takeaway.one2paid.com/"];
+    webVC.showsToolBar = YES;
     webVC.webView.allowsLinkPreview = YES;
-    webVC.navigationType = AXWebViewControllerNavigationBarItem;
+//    webVC.navigationType = AXWebViewControllerNavigationBarItem;
+    webVC.navigationType = AXWebViewControllerNavigationToolItem;
+    
+    
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:webVC];
+    nav.navigationBarHidden = YES;
+    
     self.window = [[UIWindow alloc] init];
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.frame = [UIScreen mainScreen].bounds;
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
-     */
+ 
     
     return YES;
 }
